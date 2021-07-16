@@ -9,10 +9,14 @@ const getTasks = () => {
                 'project_name', 'project_description')
 }
 
-const addTask = (task) => {
-    return db('tasks')
-        .insert(task, 'task_id')
-        .then(ids => ({task_id: ids[0]}))
+const addTask = async (task) => {
+    const newTask = await db('tasks').insert(task, 'id')
+    return await db('tasks as t')
+    .leftJoin('projects as p', 't.project_id', 'p.project_id')
+    .where("t.task_id", newTask)
+    .select('task_id', 'task_description', 
+            'task_notes', 'task_completed', 
+            'p.project_id')
 }
 
 module.exports = {
