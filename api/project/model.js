@@ -19,7 +19,12 @@ const addProject = (project) => {
         .then(ids => ({id: ids[0]}))
 }
 
+const getById = (project_id) => {
+    return db("projects").where({ project_id: Number(project_id) });
+}
+
 module.exports = {
     getAll,
-    addProject
+    addProject,
+    getById
 }

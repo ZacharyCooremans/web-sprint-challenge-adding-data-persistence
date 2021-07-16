@@ -11,14 +11,32 @@ router.get('/', async (req, res, next) => {
     }
 })
 
-router.post('/', (req, res, next) => {
+router.post('/', async (req, res, next) => {
     const project = req.body
 
-    Project.addProject(project)
-        .then(project => {
-            res.status(201).json(project)
-        })
-    .catch(next)
+    try {
+        const newProject = await Project.addProject(project)
+        const output = {
+            project_id: newProject[0].project_id,
+            project_name: newProject[0].project_name,
+            project_description: newProject[0].project_description,
+            project_completed: newProject[0].project_completed === 0 ? false : true,
+        }
+    } catch(err) {
+        next(err)
+    }
+})
+
+router.get("/:project_id", async (req, res, next) => {
+    const { project_id } = req.params;
+    console.log(req.query)
+
+    try {
+        const recipe = Project.getById(project_id);
+        res.status(200).json(recipe)
+    } catch (err) {
+        next(err)
+    }
 })
 
 router.use((err, req, res, next) => { // eslint-disable-line
