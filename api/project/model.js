@@ -13,10 +13,9 @@ async function getAll() {
     return output
 }
 
-const addProject = (project) => {
-    return db('projects')
-        .insert(project, 'project_id')
-        .then(ids => ({id: ids[0]}))
+async function addProject(project) {
+    const newProject = await db("projects").insert(project, "id");
+    return db("projects").where("project_id", newProject);
 }
 
 const getById = (project_id) => {
