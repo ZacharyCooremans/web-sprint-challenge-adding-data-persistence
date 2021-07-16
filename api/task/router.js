@@ -2,12 +2,23 @@
 const router = require('express').Router()
 const Task = require('./model')
 
-router.get('/', (req, res) => {
-    Task.getTasks()
-        .then(tasks => {
-            res.status(200).json(tasks)
+router.get('/', async (req, res, next) => {
+    try {
+        const tasks = await Task.getTasks()
+        const output = tasks.map((e) => {
+            return {
+                task_id : e.task_id,
+                task_description: e.task_description,
+                task_notes: e.task_notes,
+                task_completed: e.task_completed === 0 ? false : true,
+                project_name: e.project_name,
+                project_description: e.project_description
+            }
         })
-        .catch()
+        res.json(output)
+    } catch (err) {
+        next(err)
+    }
 })
 
 router.post('/', (req, res) => {
