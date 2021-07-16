@@ -22,6 +22,7 @@ router.post('/', async (req, res, next) => {
             project_description: newProject[0].project_description,
             project_completed: newProject[0].project_completed === 0 ? false : true,
         }
+        res.status(201).json(output)
     } catch(err) {
         next(err)
     }
