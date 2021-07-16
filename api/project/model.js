@@ -1,8 +1,16 @@
 // build your `Project` model here
 const db = require('../../data/dbConfig')
 
-const getAll = () => {
-    return db('projects')
+async function getAll() {
+    const data = await db('projects')
+    const output = data.map((e) => {
+        if(e.project_completed === 0) {
+            return {...e, project_completed: false}
+        } else if (e.project_completed === 1) {
+            return {...e, project_completed: true}
+        }
+    })
+    return output
 }
 
 const addProject = (project) => {
