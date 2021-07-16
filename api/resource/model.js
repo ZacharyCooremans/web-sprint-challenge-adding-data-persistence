@@ -5,10 +5,9 @@ const getResources = () => {
     return db('resources')
 }
 
-const addResources = (resource) => {
-    return db('resources')
-        .insert(resource, 'resource_id')
-        .then(ids => ({ id: ids[0]}))
+async function addResources(resource) {
+    const newResource = await db("resources").insert(resource, "id");
+    return db("resources").where("resource_id", newResource);
 }
 
 module.exports = {

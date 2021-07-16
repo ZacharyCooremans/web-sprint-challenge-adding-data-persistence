@@ -14,12 +14,12 @@ async function getAll() {
 }
 
 async function addProject(project) {
-    const newProject = await db("projects").insert(project, "id");
-    return db("projects").where("project_id", newProject);
+    const newProject = await db("projects").insert(project, "id")
+    return db("projects").where("project_id", newProject)
 }
 
 const getById = (project_id) => {
-    return db("projects").where({ project_id: Number(project_id) });
+    return db("projects").where({ project_id: Number(project_id) })
 }
 
 module.exports = {

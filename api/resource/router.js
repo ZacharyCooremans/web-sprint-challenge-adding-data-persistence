@@ -14,17 +14,23 @@ router.get('/', (req, res) => {
         }) 
 })
 
-router.post('/', (req, res) => {
+router.post('/', async (req,res, next) => {
     const resource = req.body
-    Resource.addResources(resource)
-        .then(resource => {
-            res.status(201).json(resource)
+    try {
+        const check = await Resource.getResources()
+        check.map((e) => {
+            if (resource.resource_name === e.resource_name) {
+                res.status(404).json({
+                    message: 'Name is already taken'
+                })
+            }
         })
-        .catch(err => {
-            err.status(500).json({
-                message: err.message
-            })
-        })
+
+        const newResource = await Resource.addResources(resource)
+        res.status(201).json(newResource[0])
+    } catch (err) {
+        next(err)
+    }
 })
 
 module.exports = router
